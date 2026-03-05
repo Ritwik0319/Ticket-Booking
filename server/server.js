@@ -15,7 +15,11 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://ticket-booking-client-1.onrender.com"], // Vite default port
+    origin: [
+      "http://localhost:5173",
+      "https://ticket-booking-client-1.onrender.com",
+      "https://ticket-booking-production-71a3.up.railway.app",
+    ], // Vite default port
     credentials: true,
   }),
 );
