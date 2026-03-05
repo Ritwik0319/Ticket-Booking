@@ -15,7 +15,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // Vite default port
+    origin: ["http://localhost:5173", "https://ticket-booking-client-1.onrender.com"], // Vite default port
     credentials: true,
   }),
 );
@@ -23,6 +23,11 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// Test route
+app.get("/api", (req, res) => {
+  res.send("API is running");
+});
 
 // Routes
 app.use("/api/auth", authRoutes);
