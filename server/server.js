@@ -17,7 +17,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://ticket-booking-production-71a3.up.railway.app",
+      "https://ticket-booking-taupe-tau.vercel.app",
     ], // Vite default port
     credentials: true,
   }),
