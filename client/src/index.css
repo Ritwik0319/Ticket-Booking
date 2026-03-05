@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+:root {
+  --primary: #3b82f6;
+  --secondary: #1e293b;
+  --bg: #f8fafc;
+}
+
+body {
+  background-color: var(--bg);
+  font-family: "Inter", sans-serif;
+}
+
+.max-container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
