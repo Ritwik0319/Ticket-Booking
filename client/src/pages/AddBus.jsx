@@ -29,6 +29,7 @@ const AddBus = () => {
     e.preventDefault();
     mutation.mutate({ busName, busNumber, totalSeats });
   };
+  
 
   return (
     <div className="max-container px-4 py-8 max-w-2xl">

@@ -14,6 +14,7 @@ const createBus = async (req, res) => {
 
   // Create seats dynamically
   const seats = [];
+  
   for (let i = 1; i <= totalSeats; i++) {
     seats.push({
       seatNumber: i.toString(),
