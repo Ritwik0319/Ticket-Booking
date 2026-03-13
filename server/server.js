@@ -17,7 +17,10 @@ app.use(cookieParser());
 //cors configuration
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://ticket-booking-88lf.onrender.com",
+    ],
     credentials: true,
   }),
 );
