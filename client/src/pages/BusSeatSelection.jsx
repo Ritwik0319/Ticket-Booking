@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { getBusById, bookTicket, holdSeats } from "../services/authService";
+import { useBus, useBookTicket, useHoldSeats } from "../hooks/useBookings";
 import toast from "react-hot-toast";
 import { Check, Info } from "lucide-react";
 
@@ -11,28 +10,11 @@ const BusSeatSelection = () => {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [passengerDetails, setPassengerDetails] = useState({});
 
-  const { data: bus, isLoading } = useQuery({
-    queryKey: ["bus", id],
-    queryFn: () => getBusById(id),
-  });
+  const { data: bus, isLoading } = useBus(id);
 
-  const mutation = useMutation({
-    mutationFn: bookTicket,
-    onSuccess: () => {
-      toast.success("Tickets booked successfully!");
-      navigate("/my-bookings");
-    },
-    onError: (error) => {
-      toast.error(error.response?.data?.message || "Booking failed");
-    },
-  });
+  const mutation = useBookTicket();
 
-  const holdMutation = useMutation({
-    mutationFn: holdSeats,
-    onError: (error) => {
-      toast.error(error.response?.data?.message || "Failed to hold seat");
-    },
-  });
+  const holdMutation = useHoldSeats();
 
   const toggleSeat = (seat) => {
     if (seat.isBooked) return;
@@ -43,10 +25,17 @@ const BusSeatSelection = () => {
       );
     } else {
       setSelectedSeats([...selectedSeats, seat]);
-      holdMutation.mutate({
-        busId: id,
-        seatNumbers: [seat.seatNumber],
-      });
+      holdMutation.mutate(
+        {
+          busId: id,
+          seatNumbers: [seat.seatNumber],
+        },
+        {
+          onError: (error) => {
+            toast.error(error.response?.data?.message || "Failed to hold seat");
+          },
+        },
+      );
     }
   };
 
@@ -72,10 +61,21 @@ const BusSeatSelection = () => {
       return;
     }
 
-    mutation.mutate({
-      busId: id,
-      seats: seatsToBook,
-    });
+    mutation.mutate(
+      {
+        busId: id,
+        seats: seatsToBook,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Tickets booked successfully!");
+          navigate("/my-bookings");
+        },
+        onError: (error) => {
+          toast.error(error.response?.data?.message || "Booking failed");
+        },
+      },
+    );
   };
 
   if (isLoading)

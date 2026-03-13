@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
-import { register as registerApi } from "../services/authService";
+import { useRegister } from "../hooks/useAuth";
 import useAuthStore from "../store/authStore";
 import toast from "react-hot-toast";
 
@@ -13,25 +12,27 @@ const Register = () => {
   const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
 
-  const mutation = useMutation({
-    mutationFn: registerApi,
-    onSuccess: (data) => {
-      login(data);
-      toast.success("Registration successful");
-      if (data.role === "admin") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/");
-      }
-    },
-    onError: (error) => {
-      toast.error(error.response?.data?.message || "Registration failed");
-    },
-  });
+  const mutation = useRegister();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    mutation.mutate({ name, email, password, role });
+    mutation.mutate(
+      { name, email, password, role },
+      {
+        onSuccess: (data) => {
+          login(data);
+          toast.success("Registration successful");
+          if (data.role === "admin") {
+            navigate("/admin/dashboard");
+          } else {
+            navigate("/");
+          }
+        },
+        onError: (error) => {
+          toast.error(error.response?.data?.message || "Registration failed");
+        },
+      },
+    );
   };
 
   return (

@@ -1,12 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-import { getMyBookings } from "../services/authService";
+import { useMyBookings } from "../hooks/useBookings";
 import { Calendar, Ticket, User } from "lucide-react";
 
 const MyBookings = () => {
-  const { data: bookings, isLoading } = useQuery({
-    queryKey: ["my-bookings"],
-    queryFn: getMyBookings,
-  });
+  const { data: bookings, isLoading } = useMyBookings();
 
   if (isLoading)
     return (

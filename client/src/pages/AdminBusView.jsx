@@ -1,15 +1,11 @@
 import { useParams, Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getAdminBusById } from "../services/authService";
+import { useAdminBus } from "../hooks/useAdmin";
 import { ArrowLeft, User, Info, Calendar } from "lucide-react";
 
 const AdminBusView = () => {
   const { id } = useParams();
 
-  const { data: bus, isLoading } = useQuery({
-    queryKey: ["bus-details", id],
-    queryFn: () => getAdminBusById(id),
-  });
+  const { data: bus, isLoading } = useAdminBus(id);
 
   if (isLoading)
     return (

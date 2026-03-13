@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
-import { login as loginApi } from "../services/authService";
+import { useLogin } from "../hooks/useAuth";
 import useAuthStore from "../store/authStore";
 import toast from "react-hot-toast";
 
@@ -11,25 +10,27 @@ const Login = () => {
   const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
 
-  const mutation = useMutation({
-    mutationFn: loginApi,
-    onSuccess: (data) => {
-      login(data);
-      toast.success("Login successful");
-      if (data.role === "admin") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/");
-      }
-    },
-    onError: (error) => {
-      toast.error(error.response?.data?.message || "Login failed");
-    },
-  });
+  const mutation = useLogin();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    mutation.mutate({ email, password });
+    mutation.mutate(
+      { email, password },
+      {
+        onSuccess: (data) => {
+          login(data);
+          toast.success("Login successful");
+          if (data.role === "admin") {
+            navigate("/admin/dashboard");
+          } else {
+            navigate("/");
+          }
+        },
+        onError: (error) => {
+          toast.error(error.response?.data?.message || "Login failed");
+        },
+      },
+    );
   };
 
   return (

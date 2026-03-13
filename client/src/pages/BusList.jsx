@@ -1,17 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import { getBuses } from "../services/authService";
+import { useBuses } from "../hooks/useBookings";
 import { Link } from "react-router-dom";
 import { Bus, Clock, MapPin } from "lucide-react";
 
 const BusList = () => {
-  const {
-    data: buses,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["buses"],
-    queryFn: getBuses,
-  });
+  const { data: buses, isLoading, isError } = useBuses();
 
   if (isLoading)
     return (

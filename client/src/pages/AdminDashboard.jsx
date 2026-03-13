@@ -1,13 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import { getAdminBuses } from "../services/authService";
+import { useAdminBuses } from "../hooks/useAdmin";
 import { Link } from "react-router-dom";
 import { Plus, Users, Bus, Eye } from "lucide-react";
 
 const AdminDashboard = () => {
-  const { data: buses, isLoading } = useQuery({
-    queryKey: ["admin-buses"],
-    queryFn: getAdminBuses,
-  });
+  const { data: buses, isLoading } = useAdminBuses();
 
   if (isLoading)
     return (

@@ -1,22 +1,25 @@
 import { Link, useNavigate } from "react-router-dom";
 import useAuthStore from "../store/authStore";
-import { logout as logoutApi } from "../services/authService";
+import { useLogout } from "../hooks/useAuth";
 import { Bus, User as UserIcon, LogOut, LayoutDashboard } from "lucide-react";
 import toast from "react-hot-toast";
 
 const Navbar = () => {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
+  const logoutMutation = useLogout();
 
   const handleLogout = async () => {
-    try {
-      await logoutApi();
-      logout();
-      toast.success("Logged out successfully");
-      navigate("/login");
-    } catch (error) {
-      toast.error("Logout failed");
-    }
+    logoutMutation.mutate(null, {
+      onSuccess: () => {
+        logout();
+        toast.success("Logged out successfully");
+        navigate("/login");
+      },
+      onError: () => {
+        toast.error("Logout failed");
+      },
+    });
   };
 
   return (

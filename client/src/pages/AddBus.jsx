@@ -1,33 +1,31 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createBus } from "../services/authService";
+import { useNavigate, Link } from "react-router-dom";
+import { useCreateBus } from "../hooks/useAdmin";
 import toast from "react-hot-toast";
 import { Bus, Hash, Grid3X3, ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
 
 const AddBus = () => {
   const [busName, setBusName] = useState("");
   const [busNumber, setBusNumber] = useState("");
   const [totalSeats, setTotalSeats] = useState(40);
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
-  const mutation = useMutation({
-    mutationFn: createBus,
-    onSuccess: () => {
-      toast.success("Bus created successfully");
-      queryClient.invalidateQueries(["admin-buses"]);
-      navigate("/admin/dashboard");
-    },
-    onError: (error) => {
-      toast.error(error.response?.data?.message || "Failed to create bus");
-    },
-  });
+  const mutation = useCreateBus();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    mutation.mutate({ busName, busNumber, totalSeats });
+    mutation.mutate(
+      { busName, busNumber, totalSeats },
+      {
+        onSuccess: () => {
+          toast.success("Bus created successfully");
+          navigate("/admin/dashboard");
+        },
+        onError: (error) => {
+          toast.error(error.response?.data?.message || "Failed to create bus");
+        },
+      },
+    );
   };
   
 
