@@ -19,7 +19,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://ticket-booking-88lf.onrender.com",
+      "https://ticket-booking-taupe-tau.vercel.app",
     ],
     credentials: true,
   }),
